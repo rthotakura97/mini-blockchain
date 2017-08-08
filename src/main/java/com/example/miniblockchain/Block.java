@@ -1,5 +1,7 @@
 package com.example.miniblockchain;
 
+import com.example.miniblockchain.BlockData.Data;
+import com.example.miniblockchain.BlockData.Transaction;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 
@@ -9,11 +11,11 @@ public class Block {
 
     private int index;
     private long timestamp;
-    private String data;
+    private Data data;
     private String prev_hash;
     private String self_hash;
 
-    public Block(int index, long timestamp, String data, String prev_hash){
+    public Block(int index, long timestamp, Data data, String prev_hash){
         this.index = index;
         this.timestamp = timestamp;
         this.data = data;
@@ -23,9 +25,22 @@ public class Block {
 
 
     private String hashBlock(){
-        String hash = Integer.toString(this.index) + Long.toString(this.timestamp) + this.data + this.prev_hash;
+        String hash = Integer.toString(this.index) + Long.toString(this.timestamp) + hashTransactions() + this.prev_hash;
         hash = hashFunction(hash);
         return hash;
+    }
+
+    private String hashTransactions(){
+        if(index == 0){
+            return null;
+        }
+
+        String transactionHash = new String();
+        for(int i = 0; i<data.getTransactions().size(); i++){
+            Transaction t = data.getTransactions().get(i);
+            transactionHash += (t.getFrom() + t.getTo() + Integer.toString(t.getAmount()));
+        }
+        return transactionHash;
     }
 
     private String hashFunction(String toHash){
@@ -43,7 +58,7 @@ public class Block {
         return this.timestamp;
     }
 
-    public String getData(){
+    public Data getData(){
         return this.data;
     }
 
@@ -58,10 +73,10 @@ public class Block {
     public void printBlock(){
         System.out.println("Index: " + Integer.toString(this.index));
         System.out.println("Timestamp: " + Long.toString(this.timestamp));
-        System.out.println("Data: " + this.data);
+        if(data != null)
+            this.data.printData();
         System.out.println("Prev Hash: " + this.prev_hash);
         System.out.println("Hash: " + this.self_hash);
     }
-
 
 }
