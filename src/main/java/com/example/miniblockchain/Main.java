@@ -6,18 +6,23 @@ import com.example.miniblockchain.BlockData.Transaction;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+NEXT TO DO:
+    ADD STRUCTURE TO KEEP TRACK OF ALL BALANCES
+    DEPLOY ON SERVER
+ */
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), null, "0");
+        Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), new Data(), "0");
         int exit_flag = 0;
+        Transaction transaction;
         while(exit_flag == 0) {
 
-            int transactionCount = 0;
-            Block lastBlock = blockchain.getBlockchain().get(blockchain.getBlockchain().size() - 1);
-            Block toAdd = new Block(lastBlock.getIndex() + 1, System.currentTimeMillis(), new Data(), lastBlock.getSelf_hash());
-            while (transactionCount != 3) {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 System.out.print("From: ");
@@ -40,16 +45,11 @@ public class Main {
                 }
                 int amount = Integer.parseInt(amountStr);
 
-                toAdd.getData().getTransactions().add(new Transaction(from, to, amount));
+                transaction = new Transaction(from, to, amount);
+                blockchain.beginMine(transaction);
 
-                transactionCount++;
-            }
-
-            if(toAdd.getData().getTransactions().size() != 0)
-                blockchain.addBlock(toAdd);
         }
 
-        System.out.println("\nB L O C K C H A I N");
         blockchain.printBlockchain();
     }
 }

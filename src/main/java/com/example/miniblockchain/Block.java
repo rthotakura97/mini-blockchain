@@ -4,6 +4,7 @@ import com.example.miniblockchain.BlockData.Data;
 import com.example.miniblockchain.BlockData.Transaction;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.security.MessageDigest;
 
@@ -22,7 +23,6 @@ public class Block {
         this.prev_hash = prev_hash;
         this.self_hash = hashBlock();
     }
-
 
     private String hashBlock(){
         String hash = Integer.toString(this.index) + Long.toString(this.timestamp) + hashTransactions() + this.prev_hash;
