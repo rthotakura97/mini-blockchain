@@ -34,7 +34,7 @@ public class Data {
             System.out.println("Transaction " + Integer.toString(i));
             System.out.println("From: " + transactions.get(i).getFrom());
             System.out.println("To: " + transactions.get(i).getTo());
-            System.out.println("Amount: " + Integer.toString(transactions.get(i).getAmount()));
+            System.out.println("Amount: " + (transactions.get(i).getAmount()));
             System.out.println("");
         }
         System.out.println("--------------------------------------------------");

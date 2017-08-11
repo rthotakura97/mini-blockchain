@@ -9,8 +9,8 @@
         <module name="mini-blockchain" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="mini-blockchain" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="mini-blockchain" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

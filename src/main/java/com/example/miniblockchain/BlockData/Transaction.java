@@ -4,9 +4,9 @@ public class Transaction {
 
     private String from;
     private String to;
-    private int amount;
+    private String amount;
 
-    public Transaction(String from, String to, int amount){
+    public Transaction(String from, String to, String amount){
         this.from = from;
         this.to = to;
         this.amount = amount;
@@ -20,7 +20,7 @@ public class Transaction {
         return to;
     }
 
-    public int getAmount(){
+    public String getAmount(){
         return amount;
     }
 

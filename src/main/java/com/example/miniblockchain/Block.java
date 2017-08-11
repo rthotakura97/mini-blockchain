@@ -38,7 +38,7 @@ public class Block {
         String transactionHash = new String();
         for(int i = 0; i<data.getTransactions().size(); i++){
             Transaction t = data.getTransactions().get(i);
-            transactionHash += (t.getFrom() + t.getTo() + Integer.toString(t.getAmount()));
+            transactionHash += (t.getFrom() + t.getTo() + (t.getAmount()));
         }
         return transactionHash;
     }

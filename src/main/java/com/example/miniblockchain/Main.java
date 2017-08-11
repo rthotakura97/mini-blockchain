@@ -2,12 +2,18 @@ package com.example.miniblockchain;
 
 import com.example.miniblockchain.BlockData.Data;
 import com.example.miniblockchain.BlockData.Transaction;
+import com.example.miniblockchain.HTTPServer;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
 NEXT TO DO:
@@ -18,9 +24,17 @@ NEXT TO DO:
 public class Main {
     public static void main(String[] args) throws IOException {
 
+        int portNumber = 8000;
+        HTTPServer.PostHandler phandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
+        HttpServer server = HttpServer.create(new InetSocketAddress(portNumber), 0);
+        System.out.println("Server started at Port " + Integer.toString(portNumber));
+        server.createContext("/Post", phandler);
+        server.setExecutor(null);
+        server.start();
+
         Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), new Data(), "0");
         int exit_flag = 0;
-        Transaction transaction;
+
         while(exit_flag == 0) {
 
 
@@ -43,13 +57,12 @@ public class Main {
                     exit_flag = 1;
                     break;
                 }
-                int amount = Integer.parseInt(amountStr);
 
-                transaction = new Transaction(from, to, amount);
-                blockchain.beginMine(transaction);
+                phandler.t = new Transaction(from, to, amountStr);
+                //blockchain.beginMine(transaction);
 
         }
-
-        blockchain.printBlockchain();
+        //blockchain.printBlockchain();
     }
+
 }

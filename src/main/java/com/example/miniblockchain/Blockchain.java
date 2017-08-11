@@ -25,7 +25,7 @@ public class Blockchain {
 
     public void beginMine(Transaction transactionHistory){
         int proof = proofOfWork();
-        Transaction newTrans = new Transaction("NETWORK", "MINER", 1);
+        Transaction newTrans = new Transaction("NETWORK", "MINER", "1");
         Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1));
         prospectiveBlock.getData().setProofId(proof);
         prospectiveBlock.getData().getTransactions().add(transactionHistory);
