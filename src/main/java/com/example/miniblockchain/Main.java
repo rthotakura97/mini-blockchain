@@ -25,10 +25,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         int portNumber = 8000;
-        HTTPServer.PostHandler phandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
+        HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
         HttpServer server = HttpServer.create(new InetSocketAddress(portNumber), 0);
         System.out.println("Server started at Port " + Integer.toString(portNumber));
-        server.createContext("/Post", phandler);
+        server.createContext("/transaction", transactionHandler);
         server.setExecutor(null);
         server.start();
 
@@ -37,32 +37,45 @@ public class Main {
 
         while(exit_flag == 0) {
 
-
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                System.out.print("From: ");
-                String from = br.readLine();
-                if(from.equals("quit")){
-                    exit_flag = 1;
-                    break;
-                }
-                System.out.print("To: ");
-                String to = br.readLine();
-                if(to.equals("quit")){
-                    exit_flag = 1;
-                    break;
-                }
-                System.out.print("Amount: ");
-                String amountStr = br.readLine();
-                if(amountStr.equals("quit")){
-                    exit_flag = 1;
-                    break;
-                }
 
-                phandler.t = new Transaction(from, to, amountStr);
-                //blockchain.beginMine(transaction);
+                System.out.println("Choose an option (Transaction, Mine, Get Blocks): ");
+                String choice = br.readLine();
+                if(choice.toLowerCase().equals("quit")){
+                    exit_flag = 1;
+                    break;
+                }
+                if(choice.toLowerCase().equals("transaction")){
+
+                    System.out.print("From: ");
+                    String from = br.readLine();
+                    if(from.equals("quit")){
+                        exit_flag = 1;
+                        break;
+                    }
+                    System.out.print("To: ");
+                    String to = br.readLine();
+                    if(to.equals("quit")){
+                        exit_flag = 1;
+                        break;
+                    }
+                    System.out.print("Amount: ");
+                    String amountStr = br.readLine();
+                    if(amountStr.equals("quit")){
+                        exit_flag = 1;
+                        break;
+                    }
+
+                    transactionHandler.t = new Transaction(from, to, amountStr);
+                }else if (choice.toLowerCase().equals("mine")){
+                    Map<String, String> result = HTTPServer.getHTML("http://localhost:8000/transaction");
+                    blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
+                }else if (choice.toLowerCase().equals("get blocks")){
+                    blockchain.printBlockchain();
+                }
 
         }
-        //blockchain.printBlockchain();
+
     }
 
 }
