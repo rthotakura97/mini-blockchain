@@ -41,6 +41,32 @@ public class HTTPServer {
         }
     }
 
+    public static class ServerBlockchainHandler implements HttpHandler {
+
+        public Blockchain blockchain;
+
+        public ServerBlockchainHandler(Blockchain blockchain){
+            this.blockchain = blockchain;
+        }
+
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            /*Map<String, Object> parameters = new HashMap<String, Object>();
+            String query = "Hello";
+            parseQuery(query, parameters);
+
+            String response = "";
+            for (String key : parameters.keySet()){
+                response += key + "=" + parameters.get(key) + ",";
+            }*/
+            String response = formatBlockchainString(blockchain);
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.toString().getBytes());
+            os.close();
+        }
+    }
+
     public static Map<String, String> getHTML(String urlToRead) throws IOException {
         StringBuilder result = new StringBuilder();
         URL url = new URL(urlToRead);
@@ -92,6 +118,31 @@ public class HTTPServer {
                 }
             }
         }
+    }
+
+    public static String formatBlockchainString(Blockchain blockchain){
+        String response = "LATEST BLOCKCHAIN\n\n";
+        for(int i = 0; i<blockchain.getBlockchain().size(); i++){
+            Block currBlock = blockchain.getBlockchain().get(i);
+            response += "Block " + Integer.toString(i) + "\n";
+            response += "Index: " + Integer.toString(currBlock.getIndex()) + "\n";
+            response += "Timestamp: " + Long.toString(currBlock.getTimestamp()) + "\n";
+            response += "\n";
+            response += "Proof: " + currBlock.getData().getProofId() + "\n\n";
+            for(int j = 0; j < currBlock.getData().getTransactions().size(); j++){
+                Transaction t = currBlock.getData().getTransactions().get(j);
+                response += "Transaction " + Integer.toString(j) + "\n";
+                response += "From: " + t.getFrom() + "\n";
+                response += "To: " + t.getTo() + "\n";
+                response += "Amount: " + t.getAmount() + "\n";
+                response += "\n";
+            }
+            response += "Previous Hash: " + currBlock.getPrev_hash() + "\n";
+            response += "Current Hash: " + currBlock.getSelf_hash() + "\n";
+            response += "------------------------------------------------------------------\n";
+        }
+
+        return response;
     }
 
     public static Map<String, String> split(String s){

@@ -18,20 +18,25 @@ import java.util.Map;
 /*
 NEXT TO DO:
     CONSENSUS PROTOCOL
+        - if local blockchian is longer, replace the servers
+        - if servers blockchain is longer, replace the local
  */
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
+        Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), new Data(), "0");
+
         int portNumber = 8000;
         HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
+        HTTPServer.ServerBlockchainHandler blockchainHandler = new HTTPServer.ServerBlockchainHandler(blockchain);
         HttpServer server = HttpServer.create(new InetSocketAddress(portNumber), 0);
         System.out.println("Server started at Port " + Integer.toString(portNumber));
         server.createContext("/transaction", transactionHandler);
+        server.createContext("/blockchain", blockchainHandler);
         server.setExecutor(null);
         server.start();
 
-        Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), new Data(), "0");
         int exit_flag = 0;
 
         while(exit_flag == 0) {
@@ -69,6 +74,7 @@ public class Main {
                 }else if (choice.toLowerCase().equals("mine")){
                     Map<String, String> result = HTTPServer.getHTML("http://localhost:8000/transaction");
                     blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
+                    blockchainHandler.blockchain = blockchain;
                 }else if (choice.toLowerCase().equals("get blocks")){
                     blockchain.printBlockchain();
                 }
