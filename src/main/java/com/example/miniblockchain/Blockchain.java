@@ -24,6 +24,11 @@ public class Blockchain {
     }
 
     public void beginMine(Transaction transactionHistory){
+        if(transactionHistory.getAmount().equals("0") || transactionHistory.getAmount().equals("none")) {
+            System.out.println("Mine Unsuccesful");
+            return;
+        }
+
         int proof = proofOfWork();
         Transaction newTrans = new Transaction("NETWORK", "MINER", "1");
         Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1));

@@ -17,8 +17,7 @@ import java.util.Map;
 
 /*
 NEXT TO DO:
-    ADD STRUCTURE TO KEEP TRACK OF ALL BALANCES
-    DEPLOY ON SERVER
+    CONSENSUS PROTOCOL
  */
 
 public class Main {
