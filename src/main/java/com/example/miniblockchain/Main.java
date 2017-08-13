@@ -25,7 +25,8 @@ NEXT TO DO:
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Blockchain blockchain = new Blockchain(0, System.currentTimeMillis(), new Data(), "0");
+        long timestamp = System.currentTimeMillis();
+        Blockchain blockchain = new Blockchain(0, timestamp, new Data(), "0");
 
         int portNumber = 8000;
         HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
@@ -76,7 +77,7 @@ public class Main {
                     blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
                     blockchainHandler.blockchain = blockchain;
                 }else if (choice.toLowerCase().equals("get blocks")){
-                    blockchain.printBlockchain();
+                    Blockchain latestChain = HTTPServer.getLatestBlockchain("http://localhost:8000/blockchain");
                 }
 
         }

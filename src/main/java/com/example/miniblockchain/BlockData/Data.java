@@ -13,6 +13,11 @@ public class Data {
         transactions = new ArrayList<Transaction>();
     }
 
+    public Data(int proofId, List<Transaction> transactions){
+        this.proofId = proofId;
+        this.transactions = transactions;
+    }
+
     public List<Transaction> getTransactions() {
         return transactions;
     }
