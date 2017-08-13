@@ -17,9 +17,8 @@ import java.util.Map;
 
 /*
 NEXT TO DO:
-    CONSENSUS PROTOCOL
-        - if local blockchian is longer, replace the servers
-        - if servers blockchain is longer, replace the local
+    CODE CLEANUP
+    CHAIN VALIDATION
  */
 
 public class Main {
@@ -81,7 +80,9 @@ public class Main {
                     blockchainHandler.blockchain = blockchain;
                 }else if (choice.toLowerCase().equals("get blocks")){
                     Blockchain latestChain = HTTPServer.getLatestBlockchain("http://localhost:8000/blockchain");
-                    //compareChains(blockchain, latestChain);
+                    if(latestChain.getBlockchain().size() > blockchain.getBlockchain().size()){
+                        blockchain = latestChain;
+                    }
                 }else if (choice.toLowerCase().equals("print")){
                     blockchain.printBlockchain();
                 }
@@ -90,7 +91,7 @@ public class Main {
 
     }
 
-    public static void compareChains(Blockchain blockchain, Blockchain latestChain){
+    public static boolean compareChains(Blockchain blockchain, Blockchain latestChain){
 
         for(int i=1; i<blockchain.getBlockchain().size(); i++) {
 
@@ -99,22 +100,36 @@ public class Main {
             Data localData = blockLocal.getData();
             Data latestData = blockLatest.getData();
 
-            if (blockLocal.getIndex() != blockLatest.getIndex())
+            if (blockLocal.getIndex() != blockLatest.getIndex()) {
                 System.out.println("Index different");
-            if (blockLocal.getTimestamp() != blockLatest.getTimestamp())
+                return false;
+            }
+            if (blockLocal.getTimestamp() != blockLatest.getTimestamp()) {
                 System.out.println("Timestamp different");
-            if (!(blockLocal.getPrev_hash().equals(blockLatest.getPrev_hash())))
+                return false;
+            }
+            if (!(blockLocal.getPrev_hash().equals(blockLatest.getPrev_hash()))) {
                 System.out.println("Prev hash different");
-            if (!(blockLocal.getSelf_hash().equals(blockLatest.getSelf_hash())))
+                return false;
+            }
+            if (!(blockLocal.getSelf_hash().equals(blockLatest.getSelf_hash()))) {
                 System.out.println("Self hash different");
-            if (localData.getProofId() != latestData.getProofId())
+                return false;
+            }
+            if (localData.getProofId() != latestData.getProofId()) {
                 System.out.println("Proof id different");
-            if (!(localData.getTransactions().get(0).equals(latestData.getTransactions().get(0))))
+                return false;
+            }
+            if (!(localData.getTransactions().get(0).equals(latestData.getTransactions().get(0)))) {
                 System.out.println("Transactions 0 different");
-            if (!(localData.getTransactions().get(1).equals(latestData.getTransactions().get(1))))
+                return false;
+            }
+            if (!(localData.getTransactions().get(1).equals(latestData.getTransactions().get(1)))) {
                 System.out.println("Transactions 1 different");
-
+                return false;
+            }
         }
+        return true;
     }
 
 }
