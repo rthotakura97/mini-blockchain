@@ -15,12 +15,11 @@ public class Blockchain {
         blockchain.add(new Block(index, timestamp, data, prev_hash));
     }
 
-    public Block makeProspectiveBlock(Block lastBlock){
+    public Block makeProspectiveBlock(Block lastBlock, Data newData){
         int index = lastBlock.getIndex() + 1;
         long timestamp = System.currentTimeMillis();
-        Data data = new Data();
         String prev_hash = lastBlock.getSelf_hash();
-        return new Block(index, timestamp, data, prev_hash);
+        return new Block(index, timestamp, newData, prev_hash);
     }
 
     public void beginMine(Transaction transactionHistory){
@@ -31,10 +30,11 @@ public class Blockchain {
 
         int proof = proofOfWork();
         Transaction newTrans = new Transaction("NETWORK", "MINER", "1");
-        Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1));
-        prospectiveBlock.getData().setProofId(proof);
-        prospectiveBlock.getData().getTransactions().add(transactionHistory);
-        prospectiveBlock.getData().getTransactions().add(newTrans);
+        List<Transaction> transactions = new ArrayList<Transaction>();
+        transactions.add(transactionHistory);
+        transactions.add(newTrans);
+        Data newDataBlock = new Data(proof, transactions);
+        Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1), newDataBlock);
         blockchain.add(prospectiveBlock);
     }
 

@@ -29,7 +29,8 @@ public class Main {
         Blockchain blockchain = new Blockchain(0, timestamp, new Data(), "0");
 
         int portNumber = 8000;
-        HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(new Transaction("none", "none", "none"));
+        Transaction emptyTransaction = new Transaction("none", "none", "none");
+        HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(emptyTransaction);
         HTTPServer.ServerBlockchainHandler blockchainHandler = new HTTPServer.ServerBlockchainHandler(blockchain);
         HttpServer server = HttpServer.create(new InetSocketAddress(portNumber), 0);
         System.out.println("Server started at Port " + Integer.toString(portNumber));
@@ -44,7 +45,7 @@ public class Main {
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-                System.out.println("Choose an option (Transaction, Mine, Get Blocks): ");
+                System.out.println("Choose an option (Transaction, Mine, Get Blocks, Print): ");
                 String choice = br.readLine();
                 if(choice.toLowerCase().equals("quit")){
                     exit_flag = 1;
@@ -72,13 +73,17 @@ public class Main {
                     }
 
                     transactionHandler.t = new Transaction(from, to, amountStr);
+
                 }else if (choice.toLowerCase().equals("mine")){
                     Map<String, String> result = HTTPServer.getHTML("http://localhost:8000/transaction");
                     blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
+                    transactionHandler.t = emptyTransaction;
                     blockchainHandler.blockchain = blockchain;
                 }else if (choice.toLowerCase().equals("get blocks")){
                     Blockchain latestChain = HTTPServer.getLatestBlockchain("http://localhost:8000/blockchain");
-                    compareChains(blockchain, latestChain);
+                    //compareChains(blockchain, latestChain);
+                }else if (choice.toLowerCase().equals("print")){
+                    blockchain.printBlockchain();
                 }
 
         }
@@ -86,22 +91,30 @@ public class Main {
     }
 
     public static void compareChains(Blockchain blockchain, Blockchain latestChain){
-        Block blockLocal = blockchain.getBlockchain().get(1);
-        Block blockLatest = latestChain.getBlockchain().get(1);
-        Data localData = blockLocal.getData();
-        Data latestData = blockLatest.getData();
 
-        if(blockLocal.getIndex() != blockLatest.getIndex())
-            System.out.println("Index different");
-        if(blockLocal.getTimestamp() != blockLatest.getTimestamp())
-            System.out.println("Timestamp different");
-        if(!(blockLocal.getPrev_hash().equals(blockLatest.getPrev_hash())))
-            System.out.println("Prev hash different");
-        if(!(blockLocal.getSelf_hash().equals(blockLatest.getPrev_hash())))
-            System.out.println("Self hash different");
-        if(!(localData.getTransactions().get()))
+        for(int i=1; i<blockchain.getBlockchain().size(); i++) {
 
+            Block blockLocal = blockchain.getBlockchain().get(i);
+            Block blockLatest = latestChain.getBlockchain().get(i);
+            Data localData = blockLocal.getData();
+            Data latestData = blockLatest.getData();
 
+            if (blockLocal.getIndex() != blockLatest.getIndex())
+                System.out.println("Index different");
+            if (blockLocal.getTimestamp() != blockLatest.getTimestamp())
+                System.out.println("Timestamp different");
+            if (!(blockLocal.getPrev_hash().equals(blockLatest.getPrev_hash())))
+                System.out.println("Prev hash different");
+            if (!(blockLocal.getSelf_hash().equals(blockLatest.getSelf_hash())))
+                System.out.println("Self hash different");
+            if (localData.getProofId() != latestData.getProofId())
+                System.out.println("Proof id different");
+            if (!(localData.getTransactions().get(0).equals(latestData.getTransactions().get(0))))
+                System.out.println("Transactions 0 different");
+            if (!(localData.getTransactions().get(1).equals(latestData.getTransactions().get(1))))
+                System.out.println("Transactions 1 different");
+
+        }
     }
 
 }
