@@ -170,7 +170,6 @@ public class HTTPServer {
             Data newData = new Data(Integer.parseInt(newBlockData.get("Proof")), newTransactions);
             newBlock = new Block(Integer.parseInt(newBlockData.get("Index")), Long.parseLong(newBlockData.get("Timestamp")), newData,
                     newBlockData.get("Previous Hash"));
-            newBlock.printBlock();
             newBlockchain.getBlockchain().add(newBlock);
         }
 
@@ -180,7 +179,7 @@ public class HTTPServer {
     public static Map<String, String> getTransactionValues(String blockstring){
         Map<String, String> components = new HashMap<String, String>();
         String[] splitBlock = blockstring.split(",");
-        for (int j=6; j < (j + 4); j++) {
+        for (int j=7; j <10 ; j++) {
             String[] getComponents = splitBlock[j].split(":");
             components.put(getComponents[0], getComponents[1]);
         }

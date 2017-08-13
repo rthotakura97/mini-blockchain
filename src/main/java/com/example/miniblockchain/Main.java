@@ -78,9 +78,29 @@ public class Main {
                     blockchainHandler.blockchain = blockchain;
                 }else if (choice.toLowerCase().equals("get blocks")){
                     Blockchain latestChain = HTTPServer.getLatestBlockchain("http://localhost:8000/blockchain");
+                    compareChains(blockchain, latestChain);
                 }
 
         }
+
+    }
+
+    public static void compareChains(Blockchain blockchain, Blockchain latestChain){
+        Block blockLocal = blockchain.getBlockchain().get(1);
+        Block blockLatest = latestChain.getBlockchain().get(1);
+        Data localData = blockLocal.getData();
+        Data latestData = blockLatest.getData();
+
+        if(blockLocal.getIndex() != blockLatest.getIndex())
+            System.out.println("Index different");
+        if(blockLocal.getTimestamp() != blockLatest.getTimestamp())
+            System.out.println("Timestamp different");
+        if(!(blockLocal.getPrev_hash().equals(blockLatest.getPrev_hash())))
+            System.out.println("Prev hash different");
+        if(!(blockLocal.getSelf_hash().equals(blockLatest.getPrev_hash())))
+            System.out.println("Self hash different");
+        if(!(localData.getTransactions().get()))
+
 
     }
 
