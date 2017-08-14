@@ -6,39 +6,66 @@ import com.example.miniblockchain.BlockData.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 
+/*Represents the blockchain*/
 public class Blockchain {
 
+    /*Blockchain clas variable*/
     private List<Block> blockchain;
 
+    /*Constructor, takes in genesis block data to start the blockchain*/
     public Blockchain(int index, long timestamp, Data data, String prev_hash){
+
+        /*Inititalizes blockchain and adds genesis block*/
         blockchain = new ArrayList<Block>();
         blockchain.add(new Block(index, timestamp, data, prev_hash));
+
     }
 
+    /*Makes the next block after the proof of work from mining is finished*/
     public Block makeProspectiveBlock(Block lastBlock, Data newData){
+
+        /*Use last blocks fields to initialize part of the block*/
         int index = lastBlock.getIndex() + 1;
         long timestamp = System.currentTimeMillis();
         String prev_hash = lastBlock.getSelf_hash();
+
+        /*Use Data that is passed in and the index,timestamp,prev_hash created to create new block*/
         return new Block(index, timestamp, newData, prev_hash);
     }
 
-    public void beginMine(Transaction transactionHistory){
+    /*Mines the transaction and creates the block to add to the blockchain*/
+    public boolean beginMine(Transaction transactionHistory){
+
+        /*Make sure block is valid, or return false*/
         if(transactionHistory.getAmount().equals("0") || transactionHistory.getAmount().equals("none")) {
             System.out.println("Mine Unsuccesful");
-            return;
+            return false;
         }
 
+        /*Proof of work function*/
         int proof = proofOfWork();
+
+        /*Make transactions for the original transaction and the reward for mining the block*/
         Transaction newTrans = new Transaction("NETWORK", "MINER", "1");
         List<Transaction> transactions = new ArrayList<Transaction>();
         transactions.add(transactionHistory);
         transactions.add(newTrans);
+
+        /*Create data for the new block*/
         Data newDataBlock = new Data(proof, transactions);
+
+        /*Create new block*/
         Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1), newDataBlock);
+
+        /*Add to blockchain*/
         blockchain.add(prospectiveBlock);
+        return true;
     }
 
+    /*Simple proof of work algorithm to prove cpu usage was used to mine block*/
     public int proofOfWork(){
+
+        /*Proof of work --> simple arithmetic --> find number that is divisible by both lastProof and 11*/
         int lastProof = blockchain.get(blockchain.size()-1).getData().getProofId();
         int incrementor = lastProof + 1;
         int divisor = 11;
@@ -50,7 +77,7 @@ public class Blockchain {
         return incrementor;
     }
 
-
+    /*Prints current blockchain*/
     public void printBlockchain(){
 
         System.out.println("\nB L O C K C H A I N\n");
@@ -62,9 +89,9 @@ public class Blockchain {
         }
     }
 
+    /*Get blockchain*/
     public List<Block> getBlockchain(){
         return blockchain;
     }
-
 
 }
