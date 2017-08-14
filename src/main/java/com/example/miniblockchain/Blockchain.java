@@ -89,6 +89,22 @@ public class Blockchain {
         }
     }
 
+    /*Validates each block in the chain looking for any hash pointer descrepancies, which can point to a tampering problem*/
+    public boolean validateChain(){
+
+        /*Loop through chain and check hash pointers, inconsistencies means block was tampered w/*/
+        for(int i=0; i<blockchain.size()-1; i++){
+
+            /*Get current hash and the next blocks prev hash and compare*/
+            String currHash = blockchain.get(i).getSelf_hash();
+            String nextHash = blockchain.get(i+1).getPrev_hash();
+            if(!(currHash.equals(nextHash)))
+                return false;
+        }
+
+        return true;
+    }
+
     /*Get blockchain*/
     public List<Block> getBlockchain(){
         return blockchain;
