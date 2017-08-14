@@ -2,17 +2,10 @@ package com.example.miniblockchain;
 
 import com.example.miniblockchain.BlockData.Data;
 import com.example.miniblockchain.BlockData.Transaction;
-import com.example.miniblockchain.HTTPServer;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /*Sets up server, manages blockchains, takes in and acts on user input*/

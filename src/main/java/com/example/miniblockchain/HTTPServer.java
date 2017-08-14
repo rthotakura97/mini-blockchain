@@ -4,13 +4,10 @@ import com.example.miniblockchain.BlockData.Data;
 import com.example.miniblockchain.BlockData.Transaction;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

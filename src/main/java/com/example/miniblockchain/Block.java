@@ -4,9 +4,6 @@ import com.example.miniblockchain.BlockData.Data;
 import com.example.miniblockchain.BlockData.Transaction;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.security.MessageDigest;
 
 public class Block {
 
