@@ -8,6 +8,10 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.Map;
 
+/*NEXT BIG STEP:
+    Deploy on non-local server.
+ */
+
 /*Sets up server, manages blockchains, takes in and acts on user input*/
 public class Main {
 
