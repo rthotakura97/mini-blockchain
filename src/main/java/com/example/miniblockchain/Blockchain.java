@@ -59,6 +59,7 @@ public class Blockchain {
 
         /*Add to blockchain*/
         blockchain.add(prospectiveBlock);
+        System.out.println("Mine Successful");
         return true;
     }
 
