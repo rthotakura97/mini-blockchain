@@ -33,7 +33,7 @@ public class HTTPServer {
             /*Build string to post to server, this is the transaction data*/
             String response = "";
             for(int i=0; i<this.t.size(); i++)
-                response += "amount=" + this.t.get(i).getAmount() +",from=" + this.t.get(i).getFrom() + ",to=" + this.t.get(i).getTo() + '\n';
+                response += "amount=" + this.t.get(i).getAmount() +",from=" + this.t.get(i).getFrom() + ",to=" + this.t.get(i).getTo() + '/' + '\n';
 
             /*Send string to server*/
             t.sendResponseHeaders(200, response.length());
@@ -85,6 +85,7 @@ public class HTTPServer {
         }
         rd.close();
         String finalstring = result.toString();
+        System.out.println(finalstring);
 
         /*Return a HashMap of the string (divide into key,value pairs)*/
         return split(finalstring);
@@ -238,7 +239,8 @@ public class HTTPServer {
 
         /*Split into different fields*/
         Map<String, String> components = new HashMap<String, String>();
-        String[] splitstring = s.split(",");
+        String[] splitTrans = s.split("/");
+        String[] splitstring = splitTrans[0].split(",");
 
         /*Loop through seperating key,value pairs*/
         for(String str: splitstring){
