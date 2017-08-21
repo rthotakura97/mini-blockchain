@@ -19,10 +19,10 @@ public class HTTPServer {
     public static class PostHandler implements HttpHandler {
 
         /*Class transaction variable, for constant updating*/
-        public Transaction t;
+        public List<Transaction> t;
 
         /*Constructor*/
-        public PostHandler(Transaction t){
+        public PostHandler(List<Transaction> t){
             this.t = t;
         }
 
@@ -31,7 +31,9 @@ public class HTTPServer {
         public void handle(HttpExchange t) throws IOException {
 
             /*Build string to post to server, this is the transaction data*/
-            String response = "amount=" + this.t.getAmount() +",from=" + this.t.getFrom() + ",to=" + this.t.getTo();
+            String response = "";
+            for(int i=0; i<this.t.size(); i++)
+                response += "amount=" + this.t.get(i).getAmount() +",from=" + this.t.get(i).getFrom() + ",to=" + this.t.get(i).getTo() + '\n';
 
             /*Send string to server*/
             t.sendResponseHeaders(200, response.length());
@@ -231,6 +233,8 @@ public class HTTPServer {
 
     /*Returns HashMap of the transaction key,value pairs from the server*/
     public static Map<String, String> split(String s){
+        if(s.isEmpty())
+            return null;
 
         /*Split into different fields*/
         Map<String, String> components = new HashMap<String, String>();

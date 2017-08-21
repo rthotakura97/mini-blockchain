@@ -6,6 +6,8 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /*NEXT BIG STEP:
@@ -25,9 +27,11 @@ public class Main {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         System.out.println("Server started at Port " + Integer.toString(8000));
 
+        /*Represents the queue for all transactions*/
+        List<Transaction> transaction_queue = new ArrayList<Transaction>();
+
         /*Initialize the handler for /transaction --> latest transaction on server*/
-        Transaction emptyTransaction = new Transaction("none", "none", "none");
-        HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(emptyTransaction);
+        HTTPServer.PostHandler transactionHandler = new HTTPServer.PostHandler(transaction_queue);
         server.createContext("/transaction", transactionHandler);
 
         /*Initialize the handler for /blockchain  --> latest blockchain emitted to server*/
@@ -73,19 +77,24 @@ public class Main {
                     }
 
                     /*Update the server with the latest transaction*/
-                    transactionHandler.t = new Transaction(from, to, amountStr);
+                    transaction_queue.add(new Transaction(from, to, amountStr));
+                    transactionHandler.t = transaction_queue;
 
                 }else if (choice.toLowerCase().equals("mine")){
 
                     /*Mine the current transaction on the server*/
                     Map<String, String> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction");
-                    boolean check = blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
-                    if(check == true) {
-                        /*Reset the transaction to none after transaction is mined*/
-                        transactionHandler.t = emptyTransaction;
-                        /*Update blockchain on the server after finished mining*/
-                        blockchainHandler.blockchain = blockchain;
-                    }
+                    if(result != null) {
+                        boolean check = blockchain.beginMine(new Transaction(result.get("from"), result.get("to"), result.get("amount")));
+                        if (check == true) {
+                            /*Take out the mined transaction from transaction queue*/
+                            transaction_queue.remove(0);
+                            transactionHandler.t = transaction_queue;
+                            /*Update blockchain on the server after finished mining*/
+                            blockchainHandler.blockchain = blockchain;
+                        }
+                    }else
+                        System.out.println("Mine Unsuccesful");
 
                 }else if (choice.toLowerCase().equals("get blocks")){
 
