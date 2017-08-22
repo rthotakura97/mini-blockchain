@@ -68,7 +68,7 @@ public class HTTPServer {
         }
     }
 
-    /*Read the latest transaction from the server to local*/
+    /*Read the latest transactions from the server to local*/
     public static List<Transaction> getServerTransaction(String urlToRead) throws IOException {
 
         /*Establish connection and mark as a GET request*/
@@ -231,7 +231,7 @@ public class HTTPServer {
 
     }
 
-    /*Returns HashMap of the transaction key,value pairs from the server*/
+    /*Returns List of the transaction key,value pairs from the server*/
     public static List<Transaction> split(String s){
         if(s.isEmpty())
             return null;

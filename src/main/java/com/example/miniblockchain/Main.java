@@ -82,8 +82,9 @@ public class Main {
 
                 }else if (choice.toLowerCase().equals("mine")){
 
-                    /*Mine the current transaction on the server*/
+                    /*Mine the latest transaction on the server*/
                     List<Transaction> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction");
+                    transaction_queue = result;
                     if(result != null) {
                         boolean check = blockchain.beginMine(result.get(0));
                         if (check == true) {
