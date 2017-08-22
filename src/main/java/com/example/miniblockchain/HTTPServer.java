@@ -69,7 +69,7 @@ public class HTTPServer {
     }
 
     /*Read the latest transaction from the server to local*/
-    public static Map<String, String> getServerTransaction(String urlToRead) throws IOException {
+    public static List<Transaction> getServerTransaction(String urlToRead) throws IOException {
 
         /*Establish connection and mark as a GET request*/
         StringBuilder result = new StringBuilder();
@@ -85,7 +85,6 @@ public class HTTPServer {
         }
         rd.close();
         String finalstring = result.toString();
-        System.out.println(finalstring);
 
         /*Return a HashMap of the string (divide into key,value pairs)*/
         return split(finalstring);
@@ -233,21 +232,28 @@ public class HTTPServer {
     }
 
     /*Returns HashMap of the transaction key,value pairs from the server*/
-    public static Map<String, String> split(String s){
+    public static List<Transaction> split(String s){
         if(s.isEmpty())
             return null;
+
+        List<Transaction> transactionList = new ArrayList<Transaction>();
 
         /*Split into different fields*/
         Map<String, String> components = new HashMap<String, String>();
         String[] splitTrans = s.split("/");
-        String[] splitstring = splitTrans[0].split(",");
 
-        /*Loop through seperating key,value pairs*/
-        for(String str: splitstring){
-            String[] insidestring = str.split("=");
-            components.put(insidestring[0], insidestring[1]);
+        for(int i = 0; i<splitTrans.length; i++) {
+            String[] splitstring = splitTrans[i].split(",");
+
+            /*Loop through seperating key,value pairs*/
+            for (String str : splitstring) {
+                String[] insidestring = str.split("=");
+                components.put(insidestring[0], insidestring[1]);
+            }
+            Transaction newTrans = new Transaction(components.get("from"), components.get("to"), components.get("amount"));
+            transactionList.add(newTrans);
         }
 
-        return components;
+        return transactionList;
     }
 }
