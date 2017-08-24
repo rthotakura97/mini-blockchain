@@ -86,10 +86,11 @@ public class Main {
                     List<Transaction> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction");
                     transaction_queue = result;
                     if(result != null) {
-                        boolean check = blockchain.beginMine(result.get(0));
+                        boolean check = blockchain.beginMine(transaction_queue);
                         if (check == true) {
                             /*Take out the mined transaction from transaction queue*/
-                            transaction_queue.remove(0);
+                            for(int j=0; j<transaction_queue.size(); j++)
+                                transaction_queue.remove(j);
                             transactionHandler.t = transaction_queue;
                             /*Update blockchain on the server after finished mining*/
                             blockchainHandler.blockchain = blockchain;

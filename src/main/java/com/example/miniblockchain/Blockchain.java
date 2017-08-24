@@ -34,25 +34,25 @@ public class Blockchain {
     }
 
     /*Mines the transaction and creates the block to add to the blockchain*/
-    public boolean beginMine(Transaction transactionHistory){
+    public boolean beginMine(List<Transaction> transactionHistory){
 
         /*Make sure block is valid, or return false*/
-        if(transactionHistory.getAmount().equals("0") || transactionHistory.getAmount().equals("none")) {
+        /*if(transactionHistory.getAmount().equals("0") || transactionHistory.getAmount().equals("none")) {
             System.out.println("Mine Unsuccesful");
             return false;
-        }
+        }*/
 
         /*Proof of work function*/
         int proof = proofOfWork();
 
         /*Make transactions for the original transaction and the reward for mining the block*/
         Transaction newTrans = new Transaction("NETWORK", "MINER", "1");
-        List<Transaction> transactions = new ArrayList<Transaction>();
-        transactions.add(transactionHistory);
-        transactions.add(newTrans);
+        //List<Transaction> transactions = new ArrayList<Transaction>();
+        //transactions.add(transactionHistory);
+        transactionHistory.add(newTrans);
 
         /*Create data for the new block*/
-        Data newDataBlock = new Data(proof, transactions);
+        Data newDataBlock = new Data(proof, transactionHistory);
 
         /*Create new block*/
         Block prospectiveBlock = makeProspectiveBlock(blockchain.get(blockchain.size()-1), newDataBlock);
