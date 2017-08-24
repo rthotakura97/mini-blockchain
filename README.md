@@ -7,3 +7,5 @@ standard blockchain including:
 * Consensus protocol
 * Immutability 
 * Party identity abstraction
+
+Here is an article[https://medium.com/@rthotakura97/https-medium-com-rthotakura97-how-i-created-my-own-mini-blockchain-e9c899c40b58] I wrote about this project!
