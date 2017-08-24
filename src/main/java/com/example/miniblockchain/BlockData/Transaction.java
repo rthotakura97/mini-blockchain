@@ -24,6 +24,7 @@ public class Transaction {
         if(this==obj)
             return true;
 
+        /*Go into next check*/
         if(obj instanceof Transaction){
 
             /*Check each field of transaction*/
