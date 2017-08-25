@@ -8,4 +8,4 @@ standard blockchain including:
 * Immutability 
 * Party identity abstraction
 
-Here is an [article](https://medium.com/@rthotakura97/https-medium-com-rthotakura97-how-i-created-my-own-mini-blockchain-e9c899c40b58) I wrote about this project!
+[Here](https://medium.com/@rthotakura97/https-medium-com-rthotakura97-how-i-created-my-own-mini-blockchain-e9c899c40b58) is an article I wrote about this project!
