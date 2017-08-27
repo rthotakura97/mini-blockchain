@@ -85,17 +85,20 @@ public class Main {
                     /*Mine the latest transaction on the server*/
                     List<Transaction> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction");
                     transaction_queue = result;
-                    if(result != null) {
-                        boolean check = blockchain.beginMine(transaction_queue);
-                        if (check == true) {
+                    if(transaction_queue.size() >= 5) {
+                        if (result != null) {
+                            boolean check = blockchain.beginMine(transaction_queue);
+                            if (check == true) {
                             /*Take out the mined transaction from transaction queue*/
-                            for(int j=0; j<transaction_queue.size(); j++)
-                                transaction_queue.remove(j);
-                            transactionHandler.t = transaction_queue;
+                                for (int j = 0; j < 5; j++)
+                                    transaction_queue.remove(j);
+                                transactionHandler.t = transaction_queue;
                             /*Update blockchain on the server after finished mining*/
-                            blockchainHandler.blockchain = blockchain;
-                        }
-                    }else
+                                blockchainHandler.blockchain = blockchain;
+                            }
+                        } else
+                            System.out.println("Mine Unsuccesful");
+                    } else
                         System.out.println("Mine Unsuccesful");
 
                 }else if (choice.toLowerCase().equals("get blocks")){
