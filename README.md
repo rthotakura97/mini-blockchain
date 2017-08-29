@@ -12,5 +12,7 @@ Currently working on extended features:
 * Migration to different server
 * Multiple transactions per block
 * Implementation of smart contracts
+* Addresses and accounts
+* Value --> reward limits, mining fees
 
 [Here](https://medium.com/@rthotakura97/https-medium-com-rthotakura97-how-i-created-my-own-mini-blockchain-e9c899c40b58) is an article I wrote about this project!
