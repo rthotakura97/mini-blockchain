@@ -7,7 +7,7 @@ standard blockchain including:
 * Consensus protocol
 * Immutability 
 * Party identity abstraction
-* Multiple transactions per block max 5 transactions per block
+* Multiple transactions per block
 
 Currently working on extended features:
 * Migration to different server

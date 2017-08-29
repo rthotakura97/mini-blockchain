@@ -86,10 +86,14 @@ public class Main {
             } else if (choice.toLowerCase().equals("mine")) {
 
                     /*Mine the latest transaction on the server*/
-                List<Transaction> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction");
+                List<Transaction> result = HTTPServer.getServerTransaction("http://localhost:8000/transaction") != null ? HTTPServer.getServerTransaction("http://localhost:8000/transaction") : transaction_queue;
                 transaction_queue = result;
-                if (result != null) {
+                if (result.isEmpty()) {
+                    System.out.println("Mine Unsuccesful");
+                } else {
+                    /*Check size of the transaction arraylist returned*/
                     int blockTransactionSize = result.size() < BLOCK_SIZE ? result.size() : BLOCK_SIZE;
+                    /*Take max first 5 trasactions*/
                     List<Transaction> passedTransactions = transaction_queue.subList(0, blockTransactionSize);
                     boolean check = blockchain.beginMine(passedTransactions);
                     if (check) {
@@ -99,9 +103,7 @@ public class Main {
                             /*Update blockchain on the server after finished mining*/
                         blockchainHandler.blockchain = blockchain;
                     }
-                } else
-                    System.out.println("Mine Unsuccesful");
-
+                }
             } else if (choice.toLowerCase().equals("get blocks")) {
 
                     /*Get latest blockchain from server for comparison*/
