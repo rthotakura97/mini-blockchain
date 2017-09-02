@@ -1,4 +1,4 @@
-# mini-blockchain
+# mini-blockchain [![Build Status](https://travis-ci.org/QVDev/mini-blockchain.svg?branch=master)](https://travis-ci.org/QVDev/mini-blockchain)
 Server-run blockchain built from scratch. The blockchain exchanges a fake currency and implements all the defining features of a
 standard blockchain.
 
